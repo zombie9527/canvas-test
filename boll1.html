@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        canvas{
+            margin: 0 auto;
+            display: block;
+            border: 1px solid #000;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas" width="600" height="600"></canvas>
+    <input type="color" id="col">
+</body>
+<script>
+    var x=100,y=100,r=20,x1=0,x2=0,y1=0,y2=0,x3=0,y3=0;
+    var vx=0,vy=0;
+    var time=null;
+    var flag=false,ic=false;
+    var lt = 0,ct=0;
+    var bgc = "#000";
+    var canvas = document.getElementById("canvas");
+    var col = document.getElementById("col");
+    var context = canvas.getContext("2d");
+    
+    time = setInterval(move,50);
+    col.onchange=function(){
+        // console.log(col.value);
+        bgc=col.value;
+        draw();
+    }
+    canvas.onmousedown = function(){
+        context.arc(x,y,r,0,2*Math.PI);
+        x1 = event.clientX - canvas.getBoundingClientRect().left;
+        y1 = event.clientY-canvas.getBoundingClientRect().top;
+        
+        if(context.isPointInPath(x1,y1)){
+            lt=new Date().getTime();
+            clearInterval(time)
+            flag=true;
+            ic=true;
+        }
+    }
+    canvas.onmouseup = function(){
+        flag=false;
+        if(ic){
+            x2 = event.clientX - canvas.getBoundingClientRect().left;
+            y2 = event.clientY-canvas.getBoundingClientRect().top;
+            ct = new Date().getTime();
+            ct = ct -lt;
+            ic=false;
+            ct = ct/500;
+            vx = (x2-x1)/ct;
+            vy = (y2-y1)/ct;
+            time = setInterval(move,50);
+            // console.log("vx"+vx+"vy"+vy);
+        }
+    }
+    canvas.addEventListener("mousemove",spead);
+    
+    function move(){  
+        x += vx;
+        y += vy;  
+        
+        
+        if(x<r||x>=canvas.width-r){
+            if(x<r) x = r;
+            else x = canvas.width-r;
+            vx=-vx*0.3;
+        }
+        else vx = vx*0.9;
+        if(y<r||y>=canvas.height-r){
+            if(y<r)y = r;
+            else {
+                y = canvas.height-r;
+            }
+            vy=-vy*0.3;
+            vy = Math.floor(vy);
+            
+        }
+        else vy *= 0.9;
+        draw();
+    }
+    function draw(){
+        context.clearRect(0,0,canvas.width,canvas.height);
+        context.beginPath();
+        context.fillStyle = bgc;
+        context.arc(x,y,r,0,2*Math.PI);
+        // console.log('y'+y+'vy'+vy);
+        context.fill();
+    }
+    function spead(event){
+        
+        event.stopPropagation();
+        if(flag){
+            x1 = x3;
+            y1 = y3;
+            x = event.clientX - canvas.getBoundingClientRect().left;
+            y = event.clientY-canvas.getBoundingClientRect().top;
+            x3 = event.clientX - canvas.getBoundingClientRect().left;
+            y3 = event.clientY-canvas.getBoundingClientRect().top;
+            
+            draw();
+        }
+    }
+</script>
+</html>
