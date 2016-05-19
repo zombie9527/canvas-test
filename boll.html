@@ -16,7 +16,7 @@
     <input type="color" id="col">
 </body>
 <script>
-    var x=100,y=100,r=20,x1=0,x2=0,y1=0,y2=0;
+    var x=100,y=100,r=20,x1=0,x2=0,y1=0,y2=0,x3=0,y3=0;
     var vx=0,vy=0,ay=3;
     var time=null;
     var flag=false,ic=false;
@@ -28,7 +28,7 @@
     
     time = setInterval(move,50);
     col.onchange=function(){
-        console.log(col.value);
+        // console.log(col.value);
         bgc=col.value;
         draw();
     }
@@ -52,7 +52,7 @@
             ct = new Date().getTime();
             ct = ct -lt;
             ic=false;
-            ct = ct/20;
+            ct = ct/1000;
             vx = (x2-x1)/ct;
             vy = (y2-y1)/ct;
             time = setInterval(move,50);
@@ -71,7 +71,7 @@
             else x = canvas.width-r;
             vx=-vx*0.5;
         }
-        else vx = Math.floor(vx);
+        else vx = vx*0.95;
         if(y<r||y>=canvas.height-r){
             if(y<r)y = r;
             else {
@@ -94,11 +94,15 @@
         context.fill();
     }
     function spead(event){
+        
         event.stopPropagation();
         if(flag){
+            x1 = x3;
+            y1 = y3;
             x = event.clientX - canvas.getBoundingClientRect().left;
             y = event.clientY-canvas.getBoundingClientRect().top;
-            
+            x3 = event.clientX - canvas.getBoundingClientRect().left;
+            y3 = event.clientY-canvas.getBoundingClientRect().top;
             
             draw();
         }
