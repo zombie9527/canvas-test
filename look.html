@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        body{text-align: center;}
+        canvas{border:1px solid #ccc;}
+    </style>
+</head>
+<body>
+    <canvas id="canvas" width="550" height="395">
+        your browser can`t open this!
+    </canvas>
+</body>
+<script>
+    var x = 100,y=200;
+    var canvas = document.getElementById("canvas");
+    var context = canvas.getContext("2d");
+    var bgi = new Image();
+    bgi.src = "http://img1.cache.netease.com/catchpic/3/3A/3ADA3FE9BB330B2C6B0DA6439D91B992.jpg";
+    if(!context.clip){alert("no");}
+    // bgi.onload=function(){
+        draw();
+        canvas.addEventListener("mousemove",move);
+    // }
+    function draw(){
+        context.clearRect(0,0,canvas.width,canvas.height);
+        context.save();
+        
+        // context.beginPath();
+        context.fillStyle = "#ccc";
+        context.fillRect(0,0,canvas.width,canvas.height); 
+
+        context.shadowColor="#f00";
+        context.shadowBlur=30;
+        
+        // context.globalCompositeOperation = "xor"
+        context.beginPath();
+        context.arc(x,y,100,0,2*Math.PI);
+        context.fillStyle = "#fff";
+        context.fill();
+         
+        context.clip();
+         
+         
+        // context.font = "bold 150px Arial";           //默认20px sans-serif
+        // context.textAlign = "center";
+        // context.textBaseline = "middle";
+        // context.fillStyle="#f00";
+        // context.fillText("text.value",100,100);
+        var pattern = context.createPattern(bgi,"no-repeat");
+        context.fillStyle = pattern;
+        context.fillRect(0,0,canvas.width,canvas.height);
+        context.globalCompositeOperation = "destination-over";
+        context.drawImage(bgi,0,0,canvas.width,canvas.height)
+       context.restore();
+    }
+    function move(event){
+        event.stopPropagation();
+        x = event.clientX - canvas.getBoundingClientRect().left;
+        y = event.clientY-canvas.getBoundingClientRect().top;
+        
+        draw();
+    }
+</script>
+</html>

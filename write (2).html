@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        canvas{
+            border: 1px solid #ccc;   
+            display: block;  
+            margin: 0 auto;
+        }
+        article{width:600px;margin: 0 auto;}
+        #bg,#pen,button{display: inline-block;}
+        #bg li,#pen li{display: inline-block;width: 10px;height:10px;background-color: #f00;}
+        .srs{display:inline-block;width:300px;margin:0 auto;padding:0 20px;font-size:16px}.srs-slider{position:relative;margin:0 auto;display:inline-block;width:300px;height:50px;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.srs-slider::before,.srs-slider::after{content:'';display:table}.srs-slider::after{clear:both}.srs-track{position:absolute;left:40px;right:40px;top:25px;height:2px;background:#e9e9e9}.srs-thumb{position:absolute;top:-25px;width:50px;height:50px;color:#fff;font-size:18px;background:#333;text-align:center;border-radius:50%;cursor:ew-resize}.srs-thumb span{position:absolute;top:50%;left:50%;-webkit-transform:translate(-50%,-50%);transform:translate(-50%,-50%)}.srs-bubble{position:absolute;top:-35px;left:25px;}.srs-bubble span{padding:5px 15px;display:inline-block;font-size:25px;color:#bdc3c3;background:#343a3a;border-radius:5px}.srs-bubble:before{content:'';background:#343a3a;position:absolute;left:50%;bottom:-25px;margin-left:-5px;width:10px;height:10px;-webkit-transform:rotate(45deg);transform:rotate(45deg)}.srs-minus{position:relative;float:left}.srs-plus{position:relative;float:right}.srs-minus,.srs-plus{top:10px;width:30px;height:30px;color:#333;font-size:18px;border:2px solid #e9e9e9;border-radius:50%;cursor:pointer}.srs-minus span{position:absolute;top:45%;left:50%;-webkit-transform:translate(-50%,-50%);transform:translate(-50%,-50%)}.srs-plus span{position:absolute;top:50%;left:50%;-webkit-transform:translate(-50%,-50%);transform:translate(-50%,-50%)}
+    </style>
+    <script src="jquery.js"></script>
+    <script src="srs.js"></script>
+</head>
+<body>6
+    <canvas id="canvas" width="600" height="600">
+        you can`t do that!
+    </canvas>
+    <article>
+        <input id="example-1" name="example-1" placeholder="2 - 20" type="number" min="2" max="20" step="1" value="5" data-color="#6324B5" class="srs">
+        <ul id="bg">
+            <span>bg</span>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+        <ul id="pen">
+            <span>bg</span>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+        <button>清空</button>
+    </article>
+</body>
+<script>
+    var x = 0,y = 0,size = 5;
+    var bgcolor = "#fff",pen = "#000";
+    var flag = false;
+    var canvas = document.getElementById("canvas");
+    var context = canvas.getContext("2d");
+    canvas.onmousedown = function(){
+        flag=true;
+    }
+    canvas.onmouseup = function(){
+        flag=false;
+    }
+    canvas.addEventListener("mousemove",write);
+    
+    // context.fillstyle=bgcolor;
+    // context.fillRect(0,0,canvas.width,canvas.height)
+    
+    function write(event){
+        if(flag){
+            x = event.clientX - canvas.getBoundingClientRect().left;
+            y = event.clientY-canvas.getBoundingClientRect().top;
+            context.beginPath();
+            context.fillstyle=pen;
+            context.arc(x,y,size,0,2*Math.PI);
+            context.fill()
+        }
+    }
+</script>
+</html>
