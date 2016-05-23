@@ -16,15 +16,19 @@
     <canvas id="canvas" height="600" width="1000"></canvas>
 </body>
 <script>
-    var x=0,y=0,i=0;
+    var time = null;
+    var x=100,y=100,i=0;
+    var colors = ["#33B5E5","#0099CC","#AA66CC","#9933CC","#99CC00","#669900","#FFBB33","#FF8800","#FF4444","#CC0000"];
     var font=[{x:0,y:0,f:'太'},{x:0,y:0,f:'原'},{x:0,y:0,f:'大'},{x:0,y:0,f:'学'}];
     var can = document.getElementById('canvas');
     var cxt = can.getContext('2d');
     document.body.onload = function(){
         can.onmouseover = set;
-        can.onmousemove = move;    
+        can.onmousemove = move;
+        time = setInterval(follow,20);
     }
     function set(event){
+        cxt.clearRect(0,0,can.width,can.height);
         x = event.clientX - can.getBoundingClientRect().left;
         y = event.clientY-can.getBoundingClientRect().top;
         for(i=0;i<font.length;i++){
@@ -33,30 +37,25 @@
             zi.y = y;
             draw(zi.x,zi.y,0,zi.f);
         }
-        
     }
     function move(){
-        cxt.clearRect(0,0,can.width,can.height);
         x = event.clientX - can.getBoundingClientRect().left;
         y = event.clientY-can.getBoundingClientRect().top;
+    }
+    function follow(){
+        cxt.clearRect(0,0,can.width,can.height);
         for(i=0;i<font.length;i++){
             zi=font[i];
-            zi.x = zi.x+(x-zi.x)/(3*(i+1)) ;
+            zi.x = zi.x+(x-zi.x)/(3*(i+1))+10;
             zi.y = zi.y+(y-zi.y)/(3*(i+1));
-            draw(zi.x,zi.y,0,zi.f);
+            draw(zi.x,zi.y,zi.f);
         }
-        var diff_y=font[font.length-1].y-y;
-        var diff_x=font[font.length-1].x-x;
-        r = 360*Math.atan(diff_y/diff_x)/(2*Math.PI);
-        
-        // console.log(r);
     }
-    function draw(x,y,r,s){
-        cxt.save()
-        cxt.rotate(r);
+    function draw(x,y,s){
+        cxt.save();
         cxt.beginPath();
-        cxt.font = "bold 40px Arial"
-        cxt.fillStyle = "#000";
+        cxt.font = "bold 20px Arial";
+        cxt.fillStyle = colors[Math.floor(Math.random()*colors.length)];
         cxt.fillText(s,x,y)
         cxt.restore()
     }
