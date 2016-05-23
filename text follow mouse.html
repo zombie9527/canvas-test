@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>text follow mouse</title>
+    <style>
+        canvas{
+            display: block;
+            margin: 0 auto;
+            border: 1px solid #000;
+            box-shadow: 0 0 10px #00f;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas" height="600" width="1000"></canvas>
+</body>
+<script>
+    var x=0,y=0,i=0;
+    var font=[{x:0,y:0,f:'太'},{x:0,y:0,f:'原'},{x:0,y:0,f:'大'},{x:0,y:0,f:'学'}];
+    var can = document.getElementById('canvas');
+    var cxt = can.getContext('2d');
+    document.body.onload = function(){
+        can.onmouseover = set;
+        can.onmousemove = move;    
+    }
+    function set(event){
+        x = event.clientX - can.getBoundingClientRect().left;
+        y = event.clientY-can.getBoundingClientRect().top;
+        for(i=0;i<font.length;i++){
+            zi=font[i];
+            zi.x = x + (i+1)*15;
+            zi.y = y;
+            draw(zi.x,zi.y,0,zi.f);
+        }
+        
+    }
+    function move(){
+        cxt.clearRect(0,0,can.width,can.height);
+        x = event.clientX - can.getBoundingClientRect().left;
+        y = event.clientY-can.getBoundingClientRect().top;
+        for(i=0;i<font.length;i++){
+            zi=font[i];
+            zi.x = zi.x+(x-zi.x)/(3*(i+1)) ;
+            zi.y = zi.y+(y-zi.y)/(3*(i+1));
+            draw(zi.x,zi.y,0,zi.f);
+        }
+        var diff_y=font[font.length-1].y-y;
+        var diff_x=font[font.length-1].x-x;
+        r = 360*Math.atan(diff_y/diff_x)/(2*Math.PI);
+        
+        // console.log(r);
+    }
+    function draw(x,y,r,s){
+        cxt.save()
+        cxt.rotate(r);
+        cxt.beginPath();
+        cxt.font = "bold 40px Arial"
+        cxt.fillStyle = "#000";
+        cxt.fillText(s,x,y)
+        cxt.restore()
+    }
+</script>
+</html>
