@@ -6,9 +6,13 @@
     <style>
         canvas{
             display: block;
-            margin: 0 auto;
-            border: 1px solid #000;
-            box-shadow: 0 0 10px #00f;
+            margin: 0;
+            padding: 0;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            right: 0;
+            left: 0;
         }
     </style>
 </head>
@@ -19,10 +23,13 @@
     var time = null;
     var x=100,y=100,i=0;
     var colors = ["#33B5E5","#0099CC","#AA66CC","#9933CC","#99CC00","#669900","#FFBB33","#FF8800","#FF4444","#CC0000"];
-    var font=[{x:0,y:0,f:'太'},{x:0,y:0,f:'原'},{x:0,y:0,f:'大'},{x:0,y:0,f:'学'}];
+    var font=[{x:0,y:0},{x:0,y:0},{x:0,y:0},{x:0,y:0},{x:0,y:0},{x:0,y:0}];
+    var fontc = ['啊','哈','哈','哈','哈','哈'];
     var can = document.getElementById('canvas');
     var cxt = can.getContext('2d');
     document.body.onload = function(){
+        can.width =  document.body.scrollWidth;
+        can.height =  document.body.scrollHeight;
         can.onmouseover = set;
         can.onmousemove = move;
         time = setInterval(follow,20);
@@ -35,10 +42,10 @@
             zi=font[i];
             zi.x = x + (i+1)*15;
             zi.y = y;
-            draw(zi.x,zi.y,0,zi.f);
+            draw(zi.x,zi.y,fontc[i]);
         }
     }
-    function move(){
+    function move(event){
         x = event.clientX - can.getBoundingClientRect().left;
         y = event.clientY-can.getBoundingClientRect().top;
     }
@@ -48,7 +55,7 @@
             zi=font[i];
             zi.x = zi.x+(x-zi.x)/(3*(i+1))+10;
             zi.y = zi.y+(y-zi.y)/(3*(i+1));
-            draw(zi.x,zi.y,zi.f);
+            draw(zi.x,zi.y,fontc[i]);
         }
     }
     function draw(x,y,s){
@@ -56,8 +63,8 @@
         cxt.beginPath();
         cxt.font = "bold 20px Arial";
         cxt.fillStyle = colors[Math.floor(Math.random()*colors.length)];
-        cxt.fillText(s,x,y)
-        cxt.restore()
+        cxt.fillText(s,x,y);
+        cxt.restore();
     }
 </script>
 </html>
